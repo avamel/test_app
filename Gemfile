@@ -9,6 +9,7 @@ gem 'mysql2'
 gem 'devise'
 gem 'rspec-rails'
 gem 'haml-rails'
+gem 'bootstrap-sass'
 
 
 # Gems used only for assets and not required
