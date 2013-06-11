@@ -1,0 +1,19 @@
+// Place all the styles related to the Articles controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+#articles {
+  overflow: auto;
+  margin-top: 1em;
+  border-bottom: 2px dotted cornflowerblue;
+  h2 {
+    font-size: 18px;
+    margin-top: 20px;
+    margin-bottom: 5px;
+  }
+  .title {
+    font-size: 2em;
+  }
+  .info {
+    font-style: italic;
+  }
+}

@@ -11,7 +11,18 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130606222754) do
+ActiveRecord::Schema.define(:version => 20130610225318) do
+
+  create_table "articles", :force => true do |t|
+    t.integer  "user_id"
+    t.string   "title"
+    t.text     "content"
+    t.date     "published_on"
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "articles", ["published_on", "user_id"], :name => "index_articles_on_published_on_and_user_id"
 
   create_table "users", :force => true do |t|
     t.string   "email",                  :default => "", :null => false

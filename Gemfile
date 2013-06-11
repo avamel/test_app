@@ -5,7 +5,7 @@ gem 'rails', '3.2.13'
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
-gem 'mysql2'
+gem 'sqlite3'
 gem 'devise'
 gem 'rspec-rails'
 gem 'haml-rails'
@@ -26,6 +26,10 @@ end
 
 gem 'jquery-rails'
 
+gem 'ckeditor'
+gem "paperclip"
+gem 'simple_form'
+gem 'cancan'
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'

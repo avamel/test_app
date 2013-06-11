@@ -27,7 +27,12 @@ section {
   overflow: auto;
 }
 
+select {
+  width: 100px;
+}
 textarea {
+  width: 250px;
+  height: 250px;
   resize: vertical;
 }
 

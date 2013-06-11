@@ -1,0 +1,13 @@
+%p
+  %b Title:
+  = @article.title
+%p
+  %b Content:
+  = strip_tags(@article.content)
+%p
+  %b Published on:
+  = @article.published_on
+
+= link_to 'Edit', edit_article_path(@article)
+\|
+= link_to 'Show all', articles_path

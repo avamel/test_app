@@ -1,10 +1,13 @@
 TestApp::Application.routes.draw do
+  resources :articles
+
+
   devise_for :users, path: '', path_names: { sign_in: 'login', sign_out: 'logout',
                      password: 'secret', confirmation: 'verification', unlock: 'unblock',
                      registration: 'register', sign_up: 'cmon_let_me_in' },
                      controllers: {omniauth_callbacks: 'omniauth_callbacks'}
 
-  root to: "static_page#index"
+  root to: "articles#index"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
