@@ -1,4 +1,5 @@
 class ArticlesController < ApplicationController
+  caches_page :index
   # GET /articles
   # GET /articles.json
   def index
@@ -17,6 +18,8 @@ class ArticlesController < ApplicationController
   # GET /articles/1.json
   def show
     @article = Article.find(params[:id])
+    @comment = Comment.new(params[:comments])
+    @comment.article = @article
 
     respond_to do |format|
       format.html # show.html.erb
@@ -43,6 +46,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
+    expire_page :action => :index
     @article = Article.new(params[:article])
     @article.user = current_user
 

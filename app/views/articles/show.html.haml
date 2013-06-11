@@ -1,8 +1,25 @@
-#articles
-  %p.title= @article.title
-  %p.info Published on #{@article.published_on.strftime("%B %e, %Y")} by #{@article.user.username}
-  = strip_tags(@article.content)
-
+%h2= @article.title
+%em Published on #{@article.published_on.strftime("%B %e, %Y")} by #{@article.user.username}
+%br
+= raw(@article.content)
+%br
 = link_to 'Edit', edit_article_path(@article)
 \|
 = link_to 'Show all', articles_path
+
+%br
+- unless @article.comments.empty?
+  %h2= pluralize(@article.comments.size, 'comment')
+#comments
+  - for comment in @article.comments
+    .comment
+      %strong=comment.user.username
+      %em on #{comment.created_at.strftime('%b %d, %Y at %H:%M')}
+      = simple_format comment.content
+      %p
+        = link_to "Edit", edit_comment_path(comment)
+        \|
+        = link_to "Destroy", comment, :method => :delete, :confirm => "Are you sure?"
+
+%h3 Add your comment:
+= render 'comments/form'

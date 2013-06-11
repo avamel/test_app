@@ -1,0 +1,15 @@
+= form_for @comment do |f|
+  = f.hidden_field :article_id
+  - if @comment.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@comment.errors.count, "error")} prohibited this comment from being saved:"
+      %ul
+        - @comment.errors.full_messages.each do |msg|
+          %li= msg
+
+
+  .field
+    = f.label :content, 'Comment'
+    = f.text_area :content, :rows => '12', :cols => 35
+  .actions
+    = f.submit 'Save'
