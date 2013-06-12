@@ -1,4 +1,6 @@
 TestApp::Application.routes.draw do
+  mount Ckeditor::Engine => '/ckeditor'
+
   resources :articles, :comments
 
 

@@ -13,6 +13,10 @@ class Ability
       can [:update, :destroy], Article do |article|
         article.try(:user) == user
       end
+
+      can :access, :ckeditor
+      can [:read, :create, :destroy], Ckeditor::Picture
+      can [:read, :create, :destroy], Ckeditor::AttachmentFile
     else
       can :read, :all
     end
