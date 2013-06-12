@@ -7,9 +7,14 @@ gem 'rails', '3.2.13'
 
 gem 'sqlite3'
 gem 'devise'
+gem 'cancan'
+gem 'rolify'
 gem 'rspec-rails'
 gem 'haml-rails'
 gem 'bootstrap-sass'
+gem 'ckeditor'
+gem "paperclip"
+gem 'simple_form'
 
 
 # Gems used only for assets and not required
@@ -26,10 +31,7 @@ end
 
 gem 'jquery-rails'
 
-gem 'ckeditor'
-gem "paperclip"
-gem 'simple_form'
-gem 'cancan'
+
 gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'omniauth-google-oauth2'

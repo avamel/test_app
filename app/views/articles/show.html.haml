@@ -3,9 +3,13 @@
 %br
 = raw(@article.content)
 %br
-= link_to 'Edit', edit_article_path(@article)
-\|
-= link_to 'Show all', articles_path
+  - if can? :update, @article
+    = link_to 'Edit', edit_article_path(@article)
+    \|
+  - if can? :destroy, @article
+    = link_to 'Destroy', @article, :method => :delete, :data => { :confirm => 'Are you sure?' }
+    \|
+  = link_to 'Show all', articles_path
 
 %br
 - unless @article.comments.empty?
@@ -17,9 +21,11 @@
       %em on #{comment.created_at.strftime('%b %d, %Y at %H:%M')}
       = simple_format comment.content
       %p
-        = link_to "Edit", edit_comment_path(comment)
-        \|
-        = link_to "Destroy", comment, :method => :delete, :confirm => "Are you sure?"
-
-%h3 Add your comment:
-= render 'comments/form'
+        - if can? :update, comment
+          = link_to "Edit", edit_comment_path(comment)
+          \|
+        - if can? :destroy, comment
+          = link_to "Destroy", comment, :method => :delete, :confirm => "Are you sure?"
+- if can? :create, @comment
+  %h3 Add your comment:
+  = render 'comments/form'

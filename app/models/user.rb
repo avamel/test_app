@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  rolify
   has_many :articles, dependent: :destroy
   has_many :comments
   # Include default devise modules. Others available are:
@@ -15,6 +16,11 @@ class User < ActiveRecord::Base
   
   validates_presence_of :username
   validates_uniqueness_of :username
+  before_create :assign_role
+
+  def assign_role
+    self.add_role :author if self.roles.first.nil?
+  end
 
   def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
     user = User.where(:provider => auth.provider, :uid => auth.uid).first
