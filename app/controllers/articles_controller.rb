@@ -1,12 +1,14 @@
 class ArticlesController < ApplicationController
+  before_filter :authenticate_user!, :except => [:index, :show]
   load_and_authorize_resource
+  #caches_page :index, :layout => false
   # GET /articles
   # GET /articles.json
   def index
     if current_user
-      @articles = Article.where("published_on <= ? or user_id = ? ", Date.today, current_user).all
+      @articles = Article.where("published_on <= ? or user_id = ? ", Date.today, current_user).find(:all)
     else
-      @articles = Article.where("published_on <= ?", Date.today).all
+      @articles = Article.where("published_on <= ?", Date.today).find(:all)
     end
     respond_to do |format|
       format.html # index.html.erb
@@ -17,7 +19,8 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @comment = Comment.new(params[:comments])
+    @comment = @article.comments.build(params[:comment])
+    @comments = @article.comments.find(:all)
     @comment.article = @article
 
     respond_to do |format|
@@ -42,6 +45,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
+    expire_page :action => :index
     @article.user = current_user
 
     respond_to do |format|
@@ -58,6 +62,7 @@ class ArticlesController < ApplicationController
   # PUT /articles/1
   # PUT /articles/1.json
   def update
+    expire_page :action => :index
     respond_to do |format|
       if @article.update_attributes(params[:article])
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }
@@ -72,6 +77,7 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
+    expire_page :action => :index
     @article.destroy
 
     respond_to do |format|

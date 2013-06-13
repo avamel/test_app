@@ -1,10 +1,8 @@
 TestApp::Application.routes.draw do
   mount Ckeditor::Engine => '/ckeditor'
 
+
   resources :articles, :comments
-
-
-  resources :articles
 
 
   devise_for :users, path: '', path_names: {sign_in: 'login', sign_out: 'logout',

@@ -12,10 +12,10 @@
   = link_to 'Show all', articles_path
 
 %br
-- unless @article.comments.empty?
-  %h2= pluralize(@article.comments.size, 'comment')
+- unless @comments.empty?
+  %h2= pluralize(@comments.size, 'comment')
 #comments
-  - for comment in @article.comments
+  - for comment in @comments
     .comment
       %strong=comment.user.username
       %em on #{comment.created_at.strftime('%b %d, %Y at %H:%M')}

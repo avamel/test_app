@@ -22,75 +22,48 @@ class User < ActiveRecord::Base
     self.add_role :author if self.roles.first.nil?
   end
 
-  def self.find_for_facebook_oauth(auth, signed_in_resource=nil)
-    user = User.where(:provider => auth.provider, :uid => auth.uid).first
-    if user
-      return user
-    else
-      registered_user = User.where(:uid => auth.uid).first
-      if registered_user
-        return registered_user
-      else
-        user = User.new(username:auth.extra.raw_info.name,
-                        provider:auth.provider,
-                        uid:auth.uid,
-                        email:"#{auth.uid}@facebook.com"
-                            #password:Devise.friendly_token[0,20]
-                        )
-        user.skip_confirmation!
-        user.save!
-        user.confirm!
-        user
-      end
+  def self.find_for_facebook_oauth(auth)
+    where('provider = ? and uid = ? or email = ? ', auth.provider, auth.uid, auth.info.email).first_or_create do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.email = auth.info.email
+      user.username = auth.info.name
+      user.skip_confirmation!
     end
   end 
 
-  def self.find_for_twitter_oauth(auth, signed_in_resource=nil)
-    user = User.where(:provider => auth.provider, :uid => auth.uid).first
-    if user
-      return user
-    else
-      registered_user = User.where(:email => auth.uid + "@twitter.com").first
-      if registered_user
-        return registered_user
-      else
-        user = User.new(username:auth.info.name,
-                        provider:auth.provider,
-                        uid:auth.uid,
-                        email:auth.uid+"@twitter.com"
-                        #password:Devise.friendly_token[0,20],
-                        )
-        user.skip_confirmation!
-        user.save!
-        user.confirm!
-        user
-      end
+  def self.find_for_twitter_oauth(auth)
+    where('provider = ? and uid = ?', auth.provider, auth.uid).first_or_create do |user|
+      user.provider = auth.provider
+      user.uid = auth.uid
+      user.email = "#{auth.uid}@twitter.com"
+      user.username = auth.info.name
+      user.skip_confirmation!
     end
   end
 
-    def self.find_for_google_oauth2(access_token, signed_in_resource=nil)
-      data = access_token.info
-      user = User.where(:provider => access_token.provider, :uid => access_token.uid ).first
-      if user
-        return user
-      else
-        registered_user = User.where(:email => access_token.info.email).first
-        if registered_user
-          return registered_user
-        else
-          user = User.new(username: data["name"],
-                          provider:access_token.provider,
-                          email: data["email"],
-                          uid: access_token.uid ,
-                          #password: Devise.friendly_token[0,20],
-                          )
-          user.skip_confirmation!
-          user.save!
-          user.confirm!
-          user
+    def self.find_for_google_oauth2(auth)
+      where('provider = ? and uid = ? or email = ? ', auth.provider, auth.uid, auth.info.email).first_or_create do |user|
+        user.provider = auth.provider
+        user.uid = auth.uid
+        user.email = auth.info.email
+        user.username = auth.info.name
+        user.skip_confirmation!
         end
-      end
     end
+
+
+   def self.new_with_session(params, session)
+     if session["devise.user_attributes"]
+       new(session["devise.user_attributes"], without_protection: true) do |user|
+         user.attributes = params
+         user.valid?
+       end
+     else
+       super
+     end
+   end
+
 
   def password_required?
     super && provider.blank?

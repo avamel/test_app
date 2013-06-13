@@ -7,11 +7,8 @@ if Object.const_defined?("Ckeditor")
     # available as additional gems.
     require "ckeditor/orm/active_record"
     config.authorize_with :cancan
-
     config.image_file_types = ["jpg", "jpeg", "png", "gif", "tiff"]
     config.attachment_file_types = ["doc", "docx", "xls", "odt", "ods", "pdf", "rar", "zip", "tar", "swf"]
-
-
 
     # Allowed image file types for upload.
     # Set to nil or [] (empty array) for all file types

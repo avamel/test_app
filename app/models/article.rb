@@ -3,7 +3,9 @@ class Article < ActiveRecord::Base
   has_many :comments, dependent: :destroy
   attr_accessible :content, :published_on, :title
 
-  validates :user_id, :title, :content, presence: true
+  validates :user_id, :title, :content, :published_on, presence: true
 
-  default_scope order: 'articles.published_on DESC'
+
+  default_scope order: 'articles.published_on ASC'
+  default_scope order: 'articles.created_at ASC'
 end
