@@ -1,7 +1,8 @@
 class ArticlesController < ApplicationController
   before_filter :authenticate_user!, :except => [:index, :show]
   load_and_authorize_resource
-  #caches_page :index, :layout => false
+  #before_filter(only: [:index]) {@pages_cache = true}
+  #caches_page :index
   # GET /articles
   # GET /articles.json
   def index
@@ -19,9 +20,8 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @comment = @article.comments.build(params[:comment])
+    @comment = @article.comments.build
     @comments = @article.comments.find(:all)
-    @comment.article = @article
 
     respond_to do |format|
       format.html # show.html.erb
@@ -45,7 +45,7 @@ class ArticlesController < ApplicationController
   # POST /articles
   # POST /articles.json
   def create
-    expire_page :action => :index
+    #expire_page :action => :index
     @article.user = current_user
 
     respond_to do |format|
@@ -62,7 +62,7 @@ class ArticlesController < ApplicationController
   # PUT /articles/1
   # PUT /articles/1.json
   def update
-    expire_page :action => :index
+    #expire_page :action => :index
     respond_to do |format|
       if @article.update_attributes(params[:article])
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }
@@ -77,7 +77,7 @@ class ArticlesController < ApplicationController
   # DELETE /articles/1
   # DELETE /articles/1.json
   def destroy
-    expire_page :action => :index
+    #expire_page :action => :index
     @article.destroy
 
     respond_to do |format|

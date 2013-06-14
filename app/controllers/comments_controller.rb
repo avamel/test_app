@@ -1,12 +1,6 @@
 class CommentsController < ApplicationController
-  before_filter :authenticate_user!
+  before_filter :authenticate_user!, except:  [:index, :show, :new]
   load_and_authorize_resource
-  def new
-    respond_to do |format|
-      format.html # new.html.erb
-      format.json { render json: @comment }
-    end
-  end
 
   # GET /comments/1/edit
   def edit
@@ -15,6 +9,8 @@ class CommentsController < ApplicationController
   # POST /comments
   # POST /comments.json
   def create
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.build(params[:comment])
     @comment.user = current_user
 
     respond_to do |format|

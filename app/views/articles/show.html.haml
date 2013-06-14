@@ -1,8 +1,8 @@
-%h2= @article.title
-%em Published on #{@article.published_on.strftime("%B %e, %Y")} by #{@article.user.username}
-%br
-= raw(@article.content)
-%br
+.article
+  %h2= @article.title
+  %em Published on #{@article.published_on.strftime("%B %e, %Y")} by #{@article.user.username}
+  %br
+  = raw(@article.content)
   - if can? :update, @article
     = link_to 'Edit', edit_article_path(@article)
     \|
@@ -12,20 +12,20 @@
   = link_to 'Show all', articles_path
 
 %br
-- unless @comments.empty?
-  %h2= pluralize(@comments.size, 'comment')
 #comments
-  - for comment in @comments
+  - unless @comments.empty?
+    %h2= pluralize(@comments.size, 'comment')
+  - @comments.each do |comment|
     .comment
       %strong=comment.user.username
       %em on #{comment.created_at.strftime('%b %d, %Y at %H:%M')}
-      = simple_format comment.content
+      %p= raw(comment.content)
       %p
         - if can? :update, comment
-          = link_to "Edit", edit_comment_path(comment)
+          = link_to "Edit", [:edit, @article, comment]
           \|
         - if can? :destroy, comment
-          = link_to "Destroy", comment, :method => :delete, :confirm => "Are you sure?"
+          = link_to "Destroy", [@article, comment], :method => :delete, :confirm => "Are you sure?"
 - if can? :create, @comment
   %h3 Add your comment:
   = render 'comments/form'
