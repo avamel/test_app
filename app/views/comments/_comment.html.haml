@@ -1,0 +1,16 @@
+%li.comment
+  .body
+    %strong=comment.user.username
+    %em on #{comment.created_at.strftime('%b %d, %Y at %H:%M')}
+    %p= comment.content
+    - if can? :update, comment
+      = link_to "Edit", [:edit, @article, comment]
+      \|
+    - if can? :destroy, comment
+      = link_to "Destroy", [@article, comment], :method => :delete, :confirm => "Are you sure?"
+    - if can? :create, Comment
+      %p= link_to 'Add a Reply', new_comment_comment_path(comment)
+   
+    - unless comment.comments.empty?
+      %ul.comment_list
+        = render :partial => 'comments/comment', :collection => comment.comments

@@ -20,9 +20,6 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
-    @comment = @article.comments.build
-    @comments = @article.comments.find(:all)
-
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @article }

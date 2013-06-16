@@ -3,8 +3,11 @@ TestApp::Application.routes.draw do
 
 
   resources :articles do
-  resources :comments, except: [:new, :show, :index]
-   end
+    resources :comments, except: [:show, :index]
+  end
+  resources :comments do
+    resources :comments, except: [:show, :index]
+  end
 
   devise_for :users, path: '', path_names: {sign_in: 'login', sign_out: 'logout',
                                             password: 'secret', confirmation: 'verification', unlock: 'unblock',
