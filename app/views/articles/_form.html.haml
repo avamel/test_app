@@ -15,5 +15,11 @@
   .field
     = f.label :published_on
     = f.date_select :published_on
+  - if @article.author_id.blank? || @article.author_id == current_user.id
+    .field
+      = f.label "Friends"
+      - User.where("id != ?", current_user).all.each do |user|
+        = check_box_tag "article[user_ids][]", user.id, @article.users.include?(user)
+        = user.username
   .actions
     = f.submit 'Save'

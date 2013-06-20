@@ -5,14 +5,14 @@
       = link_to article.title, article
       \
       %strong.comments= pluralize(article.comments.size, 'comment')
-      %p.info Published on #{article.published_on.strftime("%B %e, %Y")} by #{article.user.username}
+      %p.info Published on #{article.published_on.strftime("%B %e, %Y")} by #{User.find_by_id(article.author_id).username}
       = raw(article.content)
       %p
       \
       - if can? :update, article
         = link_to 'Edit', edit_article_path(article)
-        \|
       - if can? :destroy, article
+        \|
         = link_to 'Destroy', article, :method => :delete, :data => { :confirm => 'Are you sure?' }
 %br
 %br

@@ -10,8 +10,11 @@ class Ability
       can [:update, :destroy], Comment do |comment|
         comment.try(:user) == user
       end
+      can [:update], Article do |article|
+        article.user_ids.include?(user.id)
+      end
       can [:update, :destroy], Article do |article|
-        article.try(:user) == user
+        article.try(:author_id) == user.id
       end
 
       can :access, :ckeditor

@@ -7,7 +7,7 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     if current_user
-      @articles = Article.where("published_on <= ? or user_id = ? ", Date.today, current_user).find(:all)
+      @articles = Article.where("published_on <= ? or author_id = ?", Date.today, current_user.id).find(:all)
     else
       @articles = Article.where("published_on <= ?", Date.today).find(:all)
     end
@@ -20,6 +20,7 @@ class ArticlesController < ApplicationController
   # GET /articles/1
   # GET /articles/1.json
   def show
+    @author = User.where('id =?',@article.author_id).first.username
     respond_to do |format|
       format.html # show.html.erb
       format.json { render json: @article }
@@ -29,6 +30,7 @@ class ArticlesController < ApplicationController
   # GET /articles/new
   # GET /articles/new.json
   def new
+    @users = User.all
    respond_to do |format|
       format.html # new.html.erb
       format.json { render json: @article }
@@ -43,7 +45,7 @@ class ArticlesController < ApplicationController
   # POST /articles.json
   def create
     #expire_page :action => :index
-    @article.user = current_user
+    @article.author_id = current_user.id
 
     respond_to do |format|
       if @article.save
@@ -60,6 +62,7 @@ class ArticlesController < ApplicationController
   # PUT /articles/1.json
   def update
     #expire_page :action => :index
+    params[:article][:user_ids] ||= [] if @article.author_id == current_user.id
     respond_to do |format|
       if @article.update_attributes(params[:article])
         format.html { redirect_to @article, notice: 'Article was successfully updated.' }

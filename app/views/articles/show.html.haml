@@ -1,6 +1,6 @@
 .article
   %h2= @article.title
-  %em Published on #{@article.published_on.strftime("%B %e, %Y")} by #{@article.user.username}
+  %em Published on #{@article.published_on.strftime("%B %e, %Y")} by #{@author}
   %br
   = raw(@article.content)
   - if can? :update, @article

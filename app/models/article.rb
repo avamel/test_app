@@ -1,9 +1,9 @@
 class Article < ActiveRecord::Base
-  belongs_to :user
+  has_and_belongs_to_many :users
   has_many :comments, :as => :commentable, :dependent => :destroy
-  attr_accessible :content, :published_on, :title
+  attr_accessible :content, :published_on, :title, :user_ids, :author_id
 
-  validates :user_id, :title, :content, :published_on, presence: true
+  validates :title, :content, :published_on, presence: true
 
 
   default_scope order: 'articles.published_on ASC'

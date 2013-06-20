@@ -1,7 +1,7 @@
 class User < ActiveRecord::Base
   rolify
-  has_many :articles, dependent: :destroy
-  has_many :comments, :dependent => :destroy
+  has_and_belongs_to_many :articles
+  has_many :comments, dependent: :destroy
   # Include default devise modules. Others available are:
   # :token_authenticatable, :confirmable,
   # :lockable, :timeoutable and :omniauthable
@@ -17,6 +17,15 @@ class User < ActiveRecord::Base
   validates_presence_of :username
   validates_uniqueness_of :username
   before_create :assign_role
+  before_destroy :delete_articles
+
+
+  def delete_articles
+    @articles = Article.where('author_id = ?', id ).all
+    @articles.each do |article|
+    article.destroy
+      end
+  end
 
   def assign_role
     self.add_role :author if self.roles.first.nil?
