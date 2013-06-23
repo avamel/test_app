@@ -7,9 +7,9 @@ class ArticlesController < ApplicationController
   # GET /articles.json
   def index
     if current_user
-      @articles = Article.where("published_on <= ? or author_id = ?", Date.today, current_user.id).find(:all)
+      @articles = Article.preload(:users).includes(:users).where("published_on <= ? or author_id = ? or users.id = ?", Date.today, current_user.id, current_user.id).find(:all)
     else
-      @articles = Article.where("published_on <= ?", Date.today).find(:all)
+      @articles = Article.where("published_on <= ?", Date.today).all
     end
     respond_to do |format|
       format.html # index.html.erb
